@@ -30,7 +30,8 @@
                     </div>
                     
                     <div class="panel-body">
-                        <form role="form" method="post">
+                        {{ Form::open(['route' => 'session.store']) }}
+                        {{-- Form::open(['action' => 'UserController@index']) --}}
                             @if (Session::get('error'))
                               <div class="alert alert-danger">
                                {{ Session::get('error') }}
@@ -39,26 +40,26 @@
                             <br />
                             {{ $errors->first('username', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
-                              <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
-                              <input type="text" value="{{ Input::old('username') }}" name="username" class="form-control" placeholder="Your Username " />
+                                <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                                {{ Form::text('username', Input::old('username'), ["class" => "form-control", "placeholder" => "Your Username"]) }}
                             </div>
                             {{ $errors->first('password', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                                <input type="password" name="password" class="form-control"  placeholder="Your Password" />
+                                {{Form::password('password', ['class' => 'form-control', 'placeholder' => 'Your Password'])}}
                             </div>
                             <div class="form-group">
                                 <!-- <label class="checkbox-inline">
                                 <input type="checkbox" /> Remember me
                                 </label> -->
                                 <span class="pull-right">
-                                    <a href="#" >Forget password ? </a> 
+                                    <a href="password/remind" >Forget password ? </a> 
                                 </span>
                             </div>
                             {{ Form::submit('Login', array("class" => "btn btn-primary")) }}
                             <hr />
                             Not register ? <a href="register" >click here </a> 
-                        </form>
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>

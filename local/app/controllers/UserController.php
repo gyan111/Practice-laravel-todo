@@ -2,207 +2,82 @@
 
 class UserController extends BaseController {
 
-	//test method
-	public function index()
-	{
-
-		$users =  User::all();
-		return View::make('users.index', ['users' => $users]);
-
-	}
-
-	//test method
-	public function show($username)
-	{
-
-		$user = User::whereUsername($username)->first();
-
-		return View::make('users.show', ['users' => $user]);
-	}
-
-	//test method
+	//Registration of users page
 	public function create()
 	{
 		return View::make('users.create');
 	}
 
-	//test method
+	//Storing the user data
 	public function store()
 	{
-		//return Input::all();
-		//return Input::get('username');
-
-		//$validation = Validator::make(Input::all(), ['username' => 'required', 'password' => 'required']);
-		$validation = Validator::make(Input::all(), User::$rules);
+		$validation = Validator::make(Input::all(), User::$registration_form_rules);
 		if ($validation->fails())
 		{
-			return Redirect::back()->withInput()->withErrors($validation->messages());
-		}
-
-		$user = new User;
-
-		$user->username = Input::get('username');
-		$user->password = Hash::make(Input::get('password'));
-		$user->save();
-
-		//return Redirect::to('/users');
-		return Redirect::route('users.index');
-	}
-
-	//customer login
-	public function login()
-	{
-		if(Auth::check())
-		{
-			return Redirect::to('dashboard');
-		}
-		if (null !== Input::get('username'))
-		{
-			$validator = Validator::make(Input::all(), User::$login_form_rules);
-		
-			if ($validator->fails()) 
-			{
-				return Redirect::to('login')->withErrors($validator)->withInput(Input::except('password')); 
-			} 
-			else
-			{
-				$userdata = array(
-					'username' 	=> Input::get('username'),
-					'password' 	=> Input::get('password')
-				);
-				
-				//if (Auth::attempt(array('username' => Input::get('username'), 'password' => Hash::make(Input::get('password')))))
-				if (Auth::attempt($userdata))
-				{
-					return Redirect::to('dashboard');
-				} 
-				else
-				{
-					//echo "hi"; die();
-					return Redirect::to('login')->with('error', 'Invalid Username or Password')->withInput(Input::except('password'));
-				}
-			}
-		}
-		else
-		{
-			//return View::make('users.index', ['users' => $users]);
-			return View::make('users.login');
-		}
-		
-	}
-
-	//registration of customer
-	public function register()
-	{
-		//if (Input::get('username'))
-		//echo Input::has('username');
-		if (null !== Input::get('username'))
-		{
-			//return View::make('users.registration');
-
-			//$validation = Validator::make(Input::all(), ['username' => 'required', 'password' => 'required']);
-			// $validation = Validator::make(Input::all(), [
-			// 										'firstname'	 => 'required|',
-			// 										'lastname' 	 => 'required',
-			// 										'username' 	 => 'required',
-			// 										'email'    	 => 'required|email',
-			// 										'country'  	 => 'required',
-			// 										'password'	 => 'required|confirmed',
-			// 										'confirm_password' => 'required',
-			// 										]);
-			//echo Input::file('photo')->getFilename();
-			//var_dump(Input::file());
-			$validation = Validator::make(Input::all(), User::$registration_form_rules);
-			if ($validation->fails())
-			{
-				//return Redirect::back()->withInput()->withErrors($validation->messages());
-				return Redirect::back()->withInput()->withErrors($messages = $validation->messages());
-				
-			}
-
-			//$user = new User;
-
-			// $user->username = Input::get('username');
-			// $user->password = Hash::make(Input::get('password'));
-			//$user->save();
-
-
-			if (Input::hasFile('image'))
-			{
-
-			    $file = Input::file('image');
-
-				$img_dir = "uploads/images";
-	   		    $img_thumb_dir = $img_dir . "/thumbs";
-
-	   		    // // Create folders if they don't exist
-		        if (!file_exists($img_dir)) {
-		            mkdir($img_dir, 0777, true);
-		            mkdir($img_thumb_dir, 0777, true);
-		        }
-
-				//$destinationPath = 'images';
-				// If the uploads fail due to file system, you can try doing public_path().'/uploads' 
-				$filename = Input::get('username');
-
-				//$filename = $file->getClientOriginalName();
-				//$extension =$file->getClientOriginalExtension(); 
-				$upload_success = Input::file('image')->move($img_dir, $filename);
-
-
-				// open an image file
-				$img = Image::make('uploads/images/'. Input::get('username'));
-				//$img = Input::file('image');
-
-				// now you are able to resize the instance
-				$img->resize(240, 240);
-
-				// and insert a watermark for example
-				//$img->insert('public/watermark.png');
-
-				// finally we save the image as a new file
-				$img->save($img_thumb_dir."/" . Input::get('username') . '.jpg');
-			}
-			else
-			{
-				$filename = '';
-			}
+			return Redirect::back()->withInput()->withErrors($messages = $validation->messages());
 			
+		}
 
-			User::create([
-				'firstname' => Input::get('firstname'),
-				'lastname'  => Input::get('lastname'),
-			 	'username'  => Input::get('username'),
-			 	'email' 	=> Input::get('email'),
-			 	'phone' 	=> Input::get('phone'),
-			 	'country' 	=> Input::get('country'),
-			 	'password' 	=> Hash::make(Input::get('password')),
-			 	'image'     => $filename
-			 	]);
+		if (Input::hasFile('image'))
+		{
 
-			//return Redirect::route('login');
-			return Redirect::to('login')->with('message', 'Registration Successful');
+		    $file = Input::file('image');
+
+			$img_dir = "uploads/images";
+   		    $img_thumb_dir = $img_dir . "/thumbs";
+
+   		    // // Create folders if they don't exist
+	        if (!file_exists($img_dir)) {
+	            mkdir($img_dir, 0777, true);
+	            mkdir($img_thumb_dir, 0777, true);
+	        }
+
+			// If the uploads fail due to file system, you can try doing public_path().'/uploads' 
+			$filename = Input::get('username');
+
+			//$filename = $file->getClientOriginalName();
+			//$extension =$file->getClientOriginalExtension(); 
+			$upload_success = Input::file('image')->move($img_dir, $filename);
+
+
+			// open an image file
+			$img = Image::make('uploads/images/'. Input::get('username'));
+			//$img = Input::file('image');
+
+			// resize the instance
+			$img->resize(240, 240);
+
+			// save the image as a new file
+			$img->save($img_thumb_dir."/" . Input::get('username') . '.jpg');
 		}
 		else
 		{
-			return View::make('users.registration');
+			$filename = '';
 		}
+		
+
+		User::create([
+			'firstname' => Input::get('firstname'),
+			'lastname'  => Input::get('lastname'),
+		 	'username'  => Input::get('username'),
+		 	'email' 	=> Input::get('email'),
+		 	'phone' 	=> Input::get('phone'),
+		 	'country' 	=> Input::get('country'),
+		 	'password' 	=> Hash::make(Input::get('password')),
+		 	'image'     => $filename
+		 	]);
+
+		//return Redirect::route('login');
+		return Redirect::to('login')->with('message', 'Registration Successful');
 	}
+
 
 	//user dashboard
-	public function dashboard()
+	public function index()
 	{
-		if(Auth::check())
-		{
-			$user = User::find(Auth::id());
-			$projects = Project::where('user_id', '=', $user->id)->get();
-
-			return View::make('users.dashboard', ['user' => $user, 'projects' => $projects]);
-		}
-		else
-		{
-			return Redirect::to('login');
-		}
+		$user = User::find(Auth::id());
+		$projects = Project::where('user_id', '=', $user->id)->get();
+		return View::make('users.dashboard', ['user' => $user, 'projects' => $projects]);
 	}
 
 	//user logout
@@ -213,21 +88,19 @@ class UserController extends BaseController {
 
 	}
 
-	//user edit
+	//user edit page
+	public function edit()
+	{
+		$user = User::find(Auth::id());
+		return View::make('users.update', ['user' => $user, 'input_data' => False ]);
+
+	}
+
+	//update user
 	public function update()
 	{
-		if(! Auth::check())
-		{
-			return Redirect::to('login');
-		}
+		//$validation = Validator::make(Input::all(), User::$update_form_rules);
 		$user = User::find(Auth::id());
-
-		if (null !== Input::get('username'))
-		{
-			//$validation = Validator::make(Input::all(), User::$update_form_rules);
-
-
-
 
 			$update_form_rules = [
 				'firstname'	 		    => 'required',
@@ -242,11 +115,11 @@ class UserController extends BaseController {
 
 			if (Input::get('username') != $user->username)
 			{
-				$rules['username'] = 'required|unique:users';
+				$update_form_rules['username'] = 'required|unique:users';
 			}
 			if (Input::get('email') != $user->email)
 			{
-				$rules['email'] = 'required|email|unique:users';
+				$update_form_rules['email'] = 'required|email|unique:users';
 			}
 
 			$validation = Validator::make(Input::all(), $update_form_rules);
@@ -280,18 +153,13 @@ class UserController extends BaseController {
 
 			$user->save();
 
-			return Redirect::to('dashboard')->with('message', 'Profile Updated');
-		}
-		else
-		{
-			//$user = User::find(Auth::id());
-			return View::make('users.update', ['user' => $user, 'input_data' => False ]);
-		}
-
+			
+			$projects = Project::where('user_id', '=', $user->id)->get();
+			//return View::make('users.dashboard', ['user' => $user, 'projects' => $projects]);
+			return Redirect::to('dashboard');
 	}
 
 	//editing image
-		//user edit
 	public function update_image()
 	{
 		if(! Auth::check())

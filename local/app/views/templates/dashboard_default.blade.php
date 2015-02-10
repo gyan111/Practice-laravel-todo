@@ -7,13 +7,13 @@
        @yield('title')
     </title>
   <!-- BOOTSTRAP STYLES-->
-    <link href="<?php echo  Request::root();?>/theme/assets/css/bootstrap.css" rel="stylesheet" />
+    {{ HTML::style('/theme/assets/css/bootstrap.css'); }}
      <!-- FONTAWESOME STYLES-->
-    <link href="<?php echo  Request::root();?>/theme/assets/css/font-awesome.css" rel="stylesheet" />
+    {{ HTML::style('/theme/assets/css/font-awesome.css'); }}
         <!-- CUSTOM STYLES-->
-    <link href="<?php echo  Request::root();?>/theme/assets/css/custom.css" rel="stylesheet" />
+    {{ HTML::style('/theme/assets/css/custom.css'); }}
      <!-- GOOGLE FONTS-->
-   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    {{ HTML::style('http://fonts.googleapis.com/css?family=Open+Sans'); }}
 
 </head>
 <body>
@@ -26,7 +26,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">To-Do App</a> 
+                <a class="navbar-brand" href="{{ Request::root() }}/dashboard">To-Do App</a> 
             </div>
   <div style="color: white;
 padding: 15px 50px 5px 50px;
@@ -51,10 +51,10 @@ font-size: 16px;"> Last access : {{ $user -> updated_at}} &nbsp; <a href="{{ Req
                     <li>
                         <a 
 
-                        @if (Request::path() == 'update')
+                        @if (Request::path() == 'edit')
 						    class="active-menu"
 						@endif
-						 href="{{ Request::root() }}/update"><i class="fa fa-desktop fa-3x"></i> Edit Profile</a>
+						 href="{{ Request::root() }}/edit"><i class="fa fa-desktop fa-3x"></i> Edit Profile</a>
                     </li>
                    <!--   <li>
                         <a href="to-do"><i class="fa fa-table fa-3x"></i> To-do</a>
@@ -78,29 +78,29 @@ font-size: 16px;"> Last access : {{ $user -> updated_at}} &nbsp; <a href="{{ Req
                         <a   href="registeration.html"><i class="fa fa-laptop fa-3x"></i> Registeration</a>
                     </li!-->	
 					                   
-                    <li  @if (Request::path() == 'projects' OR Request::path() == 'projects/add' OR Request::path() == 'projects/view')
+                    <li  @if (Request::path() == 'projects' OR Request::path() == 'projects/create' OR Request::path() == 'projects/view')
 						    class="active"
 						@endif 
 					>
                         <a 
-                         @if (Request::path() == 'projects' OR Request::path() == 'projects/add' OR Request::path() == 'projects/view')
+                         @if (Request::path() == 'projects' OR Request::path() == 'projects/create' OR Request::path() == 'projects/view')
 						    class="active-menu"
 						@endif
                         href="projects"><i class="fa fa-table fa-3x"></i> Projects<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>	
                                 <a
-                                 @if (Request::path() == 'projects/view' )
+                                 @if (Request::path() == 'projects' )
 								    class="active-menu"
 								@endif  
-                                href="{{ Request::root() }}/projects/view">View</a>
+                                href="{{ Request::root() }}/projects">View</a>
                             </li>
                             <li>
                                 <a
-                                @if (Request::path() == 'projects/add' )
+                                @if (Request::path() == 'projects/create' )
 								    class="active-menu"
 								@endif 
-                                href="{{ Request::root() }}/projects/add">Add</a>
+                                href="{{ Request::root() }}/projects/create">Create</a>
                             </li>
                             <!--  <li>
                                 <a href="#">Manage</a>
@@ -108,11 +108,11 @@ font-size: 16px;"> Last access : {{ $user -> updated_at}} &nbsp; <a href="{{ Req
                          	<li>
                                 <a href="{{ Request::root() }}/tasks">Tasks<span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li>
+                                   <!--  <li>
                                         <a href="{{ Request::root() }}/tasks/view">View</a>
-                                    </li>
+                                    </li> -->
                                     <li>
-                                        <a href="{{ Request::root() }}/tasks/add">Add</a>
+                                        <a href="{{ Request::root() }}/tasks/create">create</a>
                                     </li>
                                    <!--  <li>
                                         <a href="#">Manage</a>
@@ -159,17 +159,18 @@ font-size: 16px;"> Last access : {{ $user -> updated_at}} &nbsp; <a href="{{ Req
 
      <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
     <!-- JQUERY SCRIPTS -->
-    <script src="<?php echo  Request::root();?>/theme/assets/js/jquery-1.10.2.js"></script>
+    {{ HTML::script('/theme/assets/js/jquery-1.10.2.js'); }}
       <!-- BOOTSTRAP SCRIPTS -->
-    <script src="<?php echo  Request::root();?>/theme/assets/js/bootstrap.min.js"></script>
+    {{ HTML::script('/theme/assets/js/bootstrap.min.js'); }}
     <!-- METISMENU SCRIPTS -->
-    <script src="<?php echo  Request::root();?>/theme/assets/js/jquery.metisMenu.js"></script>
+    {{ HTML::script('/theme/assets/js/jquery.metisMenu.js'); }}
      <!--Morris Script -->
-    <script src="<?php echo  Request::root();?>/theme/assets/js/morris/morris.min.js"></script>
+    {{-- HTML::script('/theme/assets/js/morris.min.js'); --}}
+     <!--Form Validator-->
+     {{ HTML::script('/theme/assets/js/BootstrapValidator.min.js'); }}
       <!-- CUSTOM SCRIPTS -->
-    <script src="<?php echo  Request::root();?>/theme/assets/js/custom.js"></script>
+    {{ HTML::script('/theme/assets/js/custom.js'); }}
       <!-- My CUSTOM SCRIPTS -->
-    <script src="<?php echo  Request::root();?>/theme/assets/js/laravel_todo.js"></script>
-
+    {{ HTML::script('/theme/assets/js/laravel_todo.js'); }}
 </body>
 </html>

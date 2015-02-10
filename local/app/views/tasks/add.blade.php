@@ -20,12 +20,12 @@
                 <strong>  Add a new task </strong>  
                     </div>
                     <div class="panel-body">
-                        <form role="form" method="post" action="{{ Request::root() }}/tasks/add" enctype="multipart/form-data">
+                        {{ Form::open(['route' => 'tasks.store', 'id' => "task_form"]) }}
                             <br/>
                             {{ $errors->first('name', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                <input type="text" value="{{ Input::old('name') }}" name="name" class="form-control" placeholder="Task Name" />
+                                {{ Form::text('name', Input::old('name'), ["class" => "form-control", "placeholder" => "Task Name"]) }}
                             </div>
                             {{ $errors->first('project_id', '<span class="text-danger">:message</span>') }}
                              <div class="form-group input-group">
@@ -35,12 +35,12 @@
                             {{ $errors->first('description', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                <input type="text" value="{{ Input::old('description') }}" name="description" class="form-control" placeholder="Short Description" />
+                                {{ Form::text('description', Input::old('description'), ["class" => "form-control", "placeholder" => "Short Description"]) }}
                             </div>
                             {{ Form::submit('Add', array("class" => "btn btn-success")) }}
                             <hr />
                            
-                        </form>
+                        {{ Form::close() }}
                     </div>
                    
                 </div>

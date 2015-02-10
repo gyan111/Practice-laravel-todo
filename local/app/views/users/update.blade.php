@@ -20,32 +20,31 @@
                 <strong>  Update profile details </strong>  
                     </div>
                     <div class="panel-body">
-                        <form role="form" method="post" action="{{ Request::root() }}/update" enctype="multipart/form-data">
+                       {{ Form::open(['action' => 'update', 'id' => "user_update_form"]) }}
                             <br/>
                             {{ $errors->first('firstname', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                <input type="text" value="{{ null !== Input::old('firstname') ? Input::old('firstname') : $user->firstname  }}" name="firstname" class="form-control" placeholder="Your First Name" />
+                                {{ Form::text('firstname', null !== Input::old('firstname') ? Input::old('firstname') : $user->firstname , ["class" => "form-control", "placeholder" => "Your First Name"]) }}
                             </div>
                             {{ $errors->first('lastname', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                <input type="text" value="{{ null !== Input::old('lastname') ? Input::old('lastname') : $user->lastname }}" name="lastname" class="form-control" placeholder="Your Last Name" />
+                                {{ Form::text('lastname', null !== Input::old('lastname') ? Input::old('lastname') : $user->lastname, ["class" => "form-control", "placeholder" => "Your Last Name"]) }}
                             </div>
                             {{ $errors->first('username', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
-                                <input type="text" value="{{ null !== Input::old('username') ? Input::old('username') : $user->username }}" name='username' class="form-control" placeholder="Desired Username" />
+                                {{ Form::text('username', null !== Input::old('username') ? Input::old('username') : $user->username, ["class" => "form-control", "placeholder" => "Desired Username"]) }}
                             </div>
                             {{ $errors->first('email', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon">@</span>
-                                <input type="text" value="{{ null !== Input::old('email') ? Input::old('email') : $user->email }}" name="email" class="form-control" placeholder="Your Email" />
+                                {{ Form::email('email', null !== Input::old('email') ? Input::old('email') : $user->email, ["class" => "form-control", "placeholder" => "Your Email"]) }}
                             </div>
                              <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                                 {{Form::text('phone', null !== Input::old('phone') ? Input::old('phone') : $user->phone , array('class' => 'form-control', 'placeholder' => 'Your Phone Number'))}}
-                                <!-- <input type="text" class="form-control" placeholder="Your Email" /> -->
                             </div>
                             {{ $errors->first('country', '<span class="text-danger">:message</span>') }}
                              <div class="form-group input-group">
@@ -55,12 +54,12 @@
                             {{ $errors->first('password', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" name="password" class="form-control" placeholder="Enter Password" />
+                                {{Form::password('password', ['class' => 'form-control', 'placeholder' => 'Enter Password'])}}
                             </div>
                             {{ $errors->first('confirm_password', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" name="password_confirmation" class="form-control" placeholder="Retype Password" />
+                                {{Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => 'Retype Password'])}}
                             </div>
                            <!--  <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-image"></i></span>
@@ -73,7 +72,7 @@
                              {{ Form::submit('Cancel', array("class" => "btn btn-warning")) }}
                             <hr />
                            
-                        </form>
+                         {{ Form::close() }}
                     </div>
                    
                 </div>

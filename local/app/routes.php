@@ -10,107 +10,45 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
-// Route::get('/', 'PagesController@home');
-// Route::get('/about', 'PagesController@about');
 
-// Route::get('users', function()
-// {
-// 	$users = User::all();
+Route::resource('user', 'UserController');
+Route::resource('session', 'SessionController');
+Route::controller('password', 'RemindersController');
 
-// 	$user = User::find(1);
+Route::get('register', ['as' => 'users.register', 'uses' => 'UserController@create']);
 
-// 	return $user->email;
-// });
+Route::get('login', 'SessionController@create');
+Route::get('logout', 'SessionController@destroy');
 
-// Route::get('/', function()
-// {
-	//$user = DB::table('users')->find(1);
-	//$user = DB::table('users')->where('username', "!=", "Jnana")->get();
-	//dd($users);
-	//$user = User::where('username', '!=', 'Jnana')->get();
-	// $user = User::all();
-	// return $user;
+//single link filter
+Route::get('dashboard', ['before' => 'auth',
+   'uses' => 'UserController@index',
+   'as' => 'user.dashboard'
+ ]);
 
+//group filter
+Route::group(array('before' => 'auth'), function()
+{
+	Route::get('edit', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
+	Route::post('update', ['as' => 'update', 'uses' => 'UserController@update']);
+	Route::resource('projects', 'ProjectController');
+	Route::resource('tasks', 'TaskController');
 
-	// $user = new User;
+	Route::post('task/status-update', 'TaskController@updateStatus');
 
-	// $user->username = "NewUser";
+	//Route::post('projects/update/{}', ['as' => 'projects.update', 'uses' => 'ProjectController@update']);
+	//Route::get('projects/add', ['as' => 'projects.add', 'uses' => 'ProjectController@create']);
+	//Route::get('projects', ['as' => 'projects', 'uses' => 'ProjectController@index']);
+	//Route::get('projects/{project}', ['as' => 'projects.id', 'uses' => 'ProjectController@show']);
 
-	// $user->password = Hash::make('password');
+});
 
-	// $user->save();
-
-	// User::create([
-	// 	'username' => "AnotherUser",
-	// 	'password' => Hash::make('password')
-	// 	]);
-
-	// $user = User::find(2);
-
-	// $user->username = 'UpdatedName';
-
-	// $user->save();
-
-	// $user = User::find(2);
-	// $user->delete();
-
-	// return User::all();
-// 	return User::orderBy('username', 'asc')->get();
-// });
-
-// Route::get('users', function()
-// {
-// 	$users = User::all();
-
-// 	//return View::make('users/index')->withUsers($users);
-// 	return View::make('users/index', ['users' => $users]);
-
-// });
-
-// Route::get('users/{username}', function($username)
-// {
-// 	$user = User::whereUsername($username)->first();
-// 	return View::make('users/show', ['user' => $user]);
-// });
-
-//Route::get('users', 'UserController@index');
-//Route::get('users/{username}', 'UserController@show');
-
-Route::resource('users', 'UserController');
-
-//Route::get('authors', 'Authors@index');
-
-Route::match(array('GET', 'POST'), 'login', 'UserController@login');
-
-Route::match(array('GET', 'POST'), 'register', 'UserController@register');
-//Route::get('register', 'UserController@register');
-//Route::post('register', 'UserController@register');
-Route::get('dashboard', 'UserController@dashboard');
-Route::get('logout', 'UserController@logout');
-//Route::get('update', 'UserController@update');
-Route::match(array('GET', 'POST'), 'update', 'UserController@update');
-
-Route::get('projects', 'ProjectController@view');
-Route::get('projects/view/{id?}', 'ProjectController@view');
-//Route::get('projects/view/{{}}', 'ProjectController@view');
-Route::match(array('GET', 'POST'), 'projects/add', 'ProjectController@add');
-Route::match(array('GET', 'POST'), 'tasks/add', 'TaskController@add');
-
-Route::match(array('GET', 'POST'), 'projects/update/{id}', 'ProjectController@update');
-Route::match(array('GET', 'POST'), 'tasks/update/{id}', 'TaskController@update');
-
-Route::get('projects/delete/{id}', 'ProjectController@delete');
-Route::get('tasks/delete/{project_id}/{task_id}', 'TaskController@delete');
-
-//Route::get('tasks/view/{id?}', 'TaskController@view');
-//oute::get('projects/tasks}', 'ProjectController@tasks');
-
-Route::match(array('GET', 'POST'), 'projects/tasks', 'ProjectController@tasks');
 
 Route::match(array('GET', 'POST'), 'update-image', 'UserController@update_image');
 
 Route::get('/', function()
 {
-    return 'Hello World';
+    echo "<a href='login'>Please Login Here to Continue</a>";
 });
+
 

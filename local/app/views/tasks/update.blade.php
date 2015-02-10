@@ -20,12 +20,12 @@
                 <strong>  Update task </strong>  
                     </div>
                     <div class="panel-body">
-                        <form role="form" method="post" action="{{ Request::root() }}/tasks/update/{{ $task->id}}" enctype="multipart/form-data">
+                        {{ Form::open(['method' => 'PUT', 'route' => ['tasks.update', $task->id], 'id' => "task_form"]) }}
                             <br/>
                             {{ $errors->first('name', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                <input type="text" value="{{ Input::old('name') ? Input::old('name') : $task->name }}" name="name" class="form-control" placeholder="Task Name" />
+                                {{ Form::text('name', Input::old('name') ? Input::old('name') : $task->name, ["class" => "form-control", "placeholder" => "Task Name"]) }}
                             </div>
                             {{ $errors->first('project_id', '<span class="text-danger">:message</span>') }}
                              <div class="form-group input-group">
@@ -42,13 +42,13 @@
                             {{ $errors->first('description', '<span class="text-danger">:message</span>') }}
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                <input type="text" value="{{ Input::old('description') ? Input::old('description') : $task->description }}" name="description" class="form-control" placeholder="Short Description" />
+                                {{ Form::text('description', Input::old('description') ? Input::old('description') : $task->description, ["class" => "form-control", "placeholder" => "Short Description"]) }}
                             </div>
 
                             {{ Form::submit('Update', array("class" => "btn btn-success")) }}
                             <hr />
                            
-                        </form>
+                       {{ Form::close() }}
                     </div>
                    
                 </div>

@@ -26,17 +26,24 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Project Name</th>
+                                    <th>Project Description</th>
                                     <th>Update</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $project_number = 1; ?>
                                 @foreach ($projects as $project)
                                     <tr>
-                                        <td>1</td>
-                                        <td><a href="{{ Request::root() }}/projects/view/{{ $project->id }}">{{ $project->name }}</a></td>
-                                        <td><a class="btn btn-primary" href="{{ Request::root() }}/projects/update/{{ $project->id }}">update</a></td>
-                                        <td><a class="btn btn-danger" href="{{ Request::root() }}/projects/delete/{{ $project->id }}">Delete</a></td>
+                                        <td>{{ $project_number++ }}</td>
+                                        <td><a href="{{ Request::root() }}/projects/{{ $project->id }}">{{ $project->name }}</a></td>
+                                        <td>{{ $project->description }}</td>
+                                        <td><a class="btn btn-primary" href="{{ Request::root() }}/projects/{{ $project->id }}/edit">update</a></td>
+                                        <td>
+                                        {{Form::open(['method'=>'delete','route'=> ['projects.destroy',$project->id ]])}}
+                                             <button class="btn btn-danger" type="submit">Delete</button>                      
+                                            {{Form::close()}}   
+                                        {{-- link_to_route('projects.destroy', 'Delete', $project->id, array('class'=>'btn btn-danger', 'data-method'=>'delete')) --}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

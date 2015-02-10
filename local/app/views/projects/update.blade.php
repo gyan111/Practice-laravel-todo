@@ -20,21 +20,21 @@
                     </div>
                     <div class="panel-body">
                         @if(!empty($project))
-                            <form role="form" method="post" action="{{ Request::root() }}/projects/update/{{ $project[0]['id'] }}" enctype="multipart/form-data">
+                        {{ Form::open(['method' => 'PUT', 'route' => ['projects.update', $project[0]['id']], 'id' => "project_form"]) }}
                                 <br/>
                                 {{ $errors->first('name', '<span class="text-danger">:message</span>') }}
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                    <input type="text" value="{{ $project[0]['name'] }}" name="name" class="form-control" placeholder="Project Name" />
+                                    {{ Form::text('name', $project[0]['name'], ["class" => "form-control", "placeholder" => "Project Name"]) }}
                                 </div>
                                 {{ $errors->first('description', '<span class="text-danger">:message</span>') }}
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                    <input type="text" value="{{ $project[0]['description'] }}" name="description" class="form-control" placeholder="Short Description" />
+                                    {{ Form::text('description', $project[0]['description'], ["class" => "form-control", "placeholder" => "Short Description"]) }}
                                 </div>
                                 {{ Form::submit('Update', array("class" => "btn btn-success")) }}
                                 <hr />
-                            </form>
+                           {{ Form::close() }}
                         @else
                         <p>Sorry project not found</p>
                         @endif
