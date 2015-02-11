@@ -1,3 +1,4 @@
+BASE_URL = "http://localhost/laravel-todo/"
 $(document).ready(function () {
 
 	//validation of registrion form
@@ -237,7 +238,7 @@ $(document).ready(function () {
 	  			$("#table_body_" + id).show();
 	  			$("#thead_" + id).hide();
 
-	  			$.get("http://localhost/laravel-todo/projects/" + id, function(data) {
+	  			$.get(BASE_URL + "projects/" + id, function(data) {
 					$.each( data, function(i, task) {
 
 						$("#thead_" + id).show();
@@ -349,7 +350,7 @@ $(document).ready(function () {
 
 			if (name != "") 
 			{
-				$.post("http://localhost/laravel-todo/projects/" + id, { 'name' :  name, 'description' : "", _method:"PATCH" }, function(data) {
+				$.post(BASE_URL + "projects/" + id, { 'name' :  name, 'description' : "", _method:"PATCH" }, function(data) {
 					$('#project_name_span_'+id).text(name);
 					$('#project_name_span_'+id).show();
 					$('#project_update_input_div_'+id).hide();
@@ -388,7 +389,7 @@ $(document).ready(function () {
 		{
 			if (confirm("Are you sure?")) {
 				
-		  		$.post("http://localhost/laravel-todo/projects/" + id, { _method:"DELETE" }, function(data) {
+		  		$.post(BASE_URL + "projects/" + id, { _method:"DELETE" }, function(data) {
 					$("#project_main_div_" + id).remove();
 				});	
 		    }
@@ -404,7 +405,7 @@ $(document).ready(function () {
 		var name = $( "input" ).val();
 		if (name != "") 
 		{
-			$.post("http://localhost/laravel-todo/projects", { 'name' :  name, 'description' : ""}, function(data) {
+			$.post(BASE_URL + "projects", { 'name' :  name, 'description' : ""}, function(data) {
 				$('<div class="panel panel-default" id="project_main_div_' + data + '">' + 
 		            '<div class="panel-heading">' + 
 		                '<div class="col-sm-8 project_div"  id="project_div_' + data + '">' + 
@@ -474,7 +475,7 @@ $(document).ready(function () {
 		{
 			var name = $('#add_task_name_input_' + id).val();
 			var description = $('#add_task_description_input_' + id).val()
-			$.post("http://localhost/laravel-todo/tasks", { 'name' :  name , 'description' : description, 'project_id' : id}, function(data) {
+			$.post(BASE_URL + "tasks", { 'name' :  name , 'description' : description, 'project_id' : id}, function(data) {
 				
 				$("#thead_" + id).show();
 
@@ -569,7 +570,7 @@ $(document).ready(function () {
 		{
 			if (confirm("Are you sure?")) {
 				
-		  		$.post("http://localhost/laravel-todo/tasks/" + id, { _method:"DELETE" }, function(data) {
+		  		$.post(BASE_URL + "tasks/" + id, { _method:"DELETE" }, function(data) {
 					$("#tr_" + id).remove();
 				});	
 		    }
@@ -603,7 +604,7 @@ $(document).ready(function () {
 
 			if (name != "") 
 			{
-				$.post("http://localhost/laravel-todo/tasks/" + id, { 'name' :  name, 'description' : description, 'completed' : 0, 'project_id': project_id, _method:"PATCH" }, function(data) {
+				$.post(BASE_URL + "tasks/" + id, { 'name' :  name, 'description' : description, 'completed' : 0, 'project_id': project_id, _method:"PATCH" }, function(data) {
 					$('#task_name_'+id).text(name);
 					$('#task_description_'+id).text(description);
 					$('#task_name_'+id).show();
@@ -649,10 +650,10 @@ $(document).ready(function () {
 			var completed = 0;
 				
 		}
-		$.post("http://localhost/laravel-todo/task/status-update", {'id' : id, 'project_id' : project_id, 'completed': completed}, function(data) {
+		$.post(BASE_URL + "task/status-update", {'id' : id, 'project_id' : project_id, 'completed': completed}, function(data) {
 
 			$(".dynamic_tr").remove();
-			$.get("http://localhost/laravel-todo/projects/" + project_id, function(data) {
+			$.get(BASE_URL + "projects/" + project_id, function(data) {
 				$.each( data, function(i, task) {
 
 					$("#thead_" + id).show();
